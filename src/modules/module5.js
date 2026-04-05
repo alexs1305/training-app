@@ -67,6 +67,90 @@ export default {
       ]
     },
     {
+      title: "Text Summarization and Entity Linking",
+      questions: [
+        {
+          question: "Which Azure AI Language feature produces a shorter version of a document by selecting and returning the most important sentences verbatim from the original text?",
+          answers: [
+            "Abstractive summarization",
+            "Extractive summarization",
+            "Key phrase extraction",
+            "Named entity recognition"
+          ],
+          correct: 1,
+          explanation: "Extractive summarization identifies and returns the most informative sentences directly from the source document. The summary is composed of verbatim sentences extracted from the original text. Abstractive summarization instead generates new sentences in the model's own words."
+        },
+        {
+          question: "A developer needs to summarize lengthy meeting transcripts into concise prose paragraphs written in the service's own words, not quoting the transcript verbatim. Which Azure AI Language summarization type should they use?",
+          answers: [
+            "Extractive summarization — selects key sentences from the source",
+            "Abstractive summarization — generates new sentences synthesizing the key information",
+            "Key phrase extraction — returns important terms and phrases",
+            "Sentiment analysis — identifies the overall tone of the transcript"
+          ],
+          correct: 1,
+          explanation: "Abstractive summarization generates a concise summary in new, natural-sounding sentences, synthesizing key information from the source rather than extracting verbatim sentences. This produces more readable, prose-style summaries compared to extractive summarization."
+        },
+        {
+          question: "Azure AI Language entity linking serves which purpose beyond what standard Named Entity Recognition (NER) provides?",
+          answers: [
+            "Detecting PII entities such as names and phone numbers for redaction",
+            "Disambiguating recognized entity mentions and linking them to their corresponding entries in a knowledge base such as Wikipedia",
+            "Classifying entities by broader categories such as Person, Organization, or Location",
+            "Extracting named entities from speech audio rather than text"
+          ],
+          correct: 1,
+          explanation: "Entity linking goes beyond NER by disambiguating which specific real-world entity a mention refers to and providing a link to an authoritative knowledge base (e.g., Wikipedia). For example, 'Apple' is disambiguated as the technology company vs. the fruit, with a URL to the correct knowledge base entry."
+        },
+        {
+          question: "What is the key functional difference between Named Entity Recognition (NER) and Entity Linking in Azure AI Language?",
+          answers: [
+            "NER processes text; entity linking processes images and documents",
+            "NER identifies and categorizes entity mentions in text; entity linking additionally disambiguates them and provides knowledge base reference links",
+            "Entity linking is a subset of NER used exclusively for organization entities",
+            "NER works without internet access; entity linking requires a live connection to Wikipedia"
+          ],
+          correct: 1,
+          explanation: "NER identifies spans of text as entity categories (Person, Location, Organization, Date, etc.). Entity linking adds disambiguation — determining which specific real-world entity is meant — and returns a URL to the corresponding knowledge base entry. They are complementary capabilities."
+        }
+      ],
+      variantQuestions: [
+        {
+          question: "A news summarization service needs to condense articles into 3–4 new sentences capturing the main points, without copying text directly from the article. Which Azure AI Language feature should be used?",
+          answers: [
+            "Extractive summarization — returns selected original sentences from the article",
+            "Abstractive summarization — generates new sentences synthesizing the key information",
+            "Key phrase extraction — returns important keywords and phrases, not full sentences",
+            "Sentiment analysis — evaluates article tone but does not produce a summary"
+          ],
+          correct: 1,
+          explanation: "Abstractive summarization generates summary content in the service's own words, producing naturally-written prose rather than copying verbatim sentences. For new, synthesized summary sentences, abstractive is the correct choice."
+        },
+        {
+          question: "A legal document contains the phrase 'filed a claim against Mercury'. Azure AI Language NER labels 'Mercury' as an Organization entity. Entity Linking returns a Wikipedia URL for Mercury Insurance Group. What does this demonstrate about the two features working together?",
+          answers: [
+            "NER detected the entity category; entity linking resolved the ambiguity by identifying the specific real-world organization",
+            "NER and entity linking produced conflicting results and the ambiguous entity should be discarded",
+            "Entity linking replaced NER in this pipeline to reduce API calls and processing time",
+            "The entity linking URL indicates the document was sourced from Wikipedia"
+          ],
+          correct: 0,
+          explanation: "NER identifies the text span 'Mercury' as an Organization entity category. Entity linking then disambiguates which specific Mercury is referenced and links to the correct knowledge base entry (Mercury Insurance Group, not the planet or car brand). They are complementary, not conflicting."
+        },
+        {
+          question: "A developer uses Azure AI Language extractive summarization on a 10-page report and receives back 5 sentences. What is guaranteed to be true about those 5 sentences?",
+          answers: [
+            "They are newly generated sentences that paraphrase the report's key points",
+            "They are verbatim sentences taken directly from the original report, selected as most important",
+            "They are the first 5 sentences of the report with filler words removed",
+            "They are translated into a neutral English register for broader accessibility"
+          ],
+          correct: 1,
+          explanation: "Extractive summarization returns sentences that are copied verbatim from the source document — they are not paraphrased or rewritten. The service scores and selects the sentences judged most informative, but the wording is unchanged from the original."
+        }
+      ]
+    },
+    {
       title: "Translation with Azure AI Translator",
       questions: [
         {
