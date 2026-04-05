@@ -1015,14 +1015,18 @@ function LessonPath({ userData, onStartLesson }) {
 }
 
 function QuizView({ mod, lesson, onComplete, onBack }) {
+  const [questionQueue, setQuestionQueue] = useState(lesson.questions)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [answered, setAnswered] = useState(false)
-  const [score, setScore] = useState(0)
+  const [incorrectQuestions, setIncorrectQuestions] = useState([])
+  const [roundNumber, setRoundNumber] = useState(1)
+  const [showRoundSummary, setShowRoundSummary] = useState(false)
+  const [retryQueue, setRetryQueue] = useState([])
   const [showResult, setShowResult] = useState(false)
   const [xpGained, setXpGained] = useState(0)
 
-  const question = lesson.questions[questionIndex]
+  const question = questionQueue[questionIndex]
 
   function handleSelectAnswer(index) {
     if (answered) return
@@ -1032,23 +1036,42 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
   function handleCheckAnswer() {
     if (selectedAnswer === null) return
     setAnswered(true)
-    if (selectedAnswer === question.correct) {
-      setScore(s => s + 1)
+    if (selectedAnswer !== question.correct) {
+      setIncorrectQuestions(prev => [...prev, question])
     }
   }
 
   function handleNext() {
-    if (questionIndex + 1 < lesson.questions.length) {
+    if (questionIndex + 1 < questionQueue.length) {
       setQuestionIndex(i => i + 1)
       setSelectedAnswer(null)
       setAnswered(false)
-    } else {
-      const finalScore = selectedAnswer === question.correct ? score + 1 : score
-      const xp = finalScore * 10
+      return
+    }
+
+    // End of round — incorrectQuestions is already updated by handleCheckAnswer
+    if (incorrectQuestions.length === 0) {
+      // All questions answered correctly — complete the lesson
+      const xp = lesson.questions.length * 10
       setXpGained(xp)
       setShowResult(true)
       onComplete(xp)
+    } else {
+      // Some questions were wrong — show round summary and prepare retry
+      setRetryQueue(incorrectQuestions)
+      setShowRoundSummary(true)
     }
+  }
+
+  function handleRetry() {
+    setQuestionQueue(retryQueue)
+    setQuestionIndex(0)
+    setSelectedAnswer(null)
+    setAnswered(false)
+    setIncorrectQuestions([])
+    setRoundNumber(r => r + 1)
+    setShowRoundSummary(false)
+    setRetryQueue([])
   }
 
   function getAnswerClass(index) {
@@ -1063,24 +1086,32 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
   }
 
   if (showResult) {
-    const percentage = (xpGained / 10 / lesson.questions.length) * 100
-    let icon, title, message
-    if (percentage === 100) {
-      icon = '🎉'; title = 'Perfect!'; message = 'You got all questions correct!'
-    } else if (percentage >= 70) {
-      icon = '🌟'; title = 'Great Job!'; message = `You got ${xpGained / 10} out of ${lesson.questions.length} correct!`
-    } else {
-      icon = '💪'; title = 'Keep Practicing!'; message = `You got ${xpGained / 10} out of ${lesson.questions.length} correct. Try again to master this lesson!`
-    }
-
     return (
       <div className="result-modal">
         <div className="result-content">
-          <div className="result-icon">{icon}</div>
-          <div className="result-title">{title}</div>
-          <div className="result-message">{message}</div>
+          <div className="result-icon">🎉</div>
+          <div className="result-title">Perfect!</div>
+          <div className="result-message">You answered all questions correctly!</div>
           <div className="xp-gained">+{xpGained} XP</div>
           <button className="btn btn-primary" onClick={onBack}>Continue Learning</button>
+        </div>
+      </div>
+    )
+  }
+
+  if (showRoundSummary) {
+    const correctInRound = questionQueue.length - retryQueue.length
+    return (
+      <div className="result-modal">
+        <div className="result-content">
+          <div className="result-icon">💪</div>
+          <div className="result-title">Round {roundNumber} Complete!</div>
+          <div className="result-message">
+            You got {correctInRound} out of {questionQueue.length} correct.
+            <br />
+            {retryQueue.length} question{retryQueue.length !== 1 ? 's' : ''} need{retryQueue.length === 1 ? 's' : ''} more practice — keep going!
+          </div>
+          <button className="btn btn-primary" onClick={handleRetry}>Practice Missed Questions</button>
         </div>
       </div>
     )
@@ -1091,7 +1122,10 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
       <button className="back-button" onClick={onBack}>← Back to Lessons</button>
       <div className="quiz-header">
         <div className="quiz-title">{lesson.isRevision ? '🔄 ' : ''}{lesson.title}</div>
-        <div className="quiz-progress">Question {questionIndex + 1} of {lesson.questions.length}</div>
+        <div className="quiz-progress">
+          Question {questionIndex + 1} of {questionQueue.length}
+          {roundNumber > 1 && <span className="retry-badge">Retry Round {roundNumber}</span>}
+        </div>
       </div>
       <div className="question-card">
         <div className="question-text">{question.question}</div>
