@@ -179,6 +179,17 @@ body {
   cursor: not-allowed;
 }
 
+.lesson-dot.revision {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  font-size: 14px;
+}
+
+.lesson-dot.revision.completed {
+  background: #28a745;
+  border-color: #28a745;
+}
+
 .quiz-container {
   position: relative;
 }
