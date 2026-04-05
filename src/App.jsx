@@ -68,6 +68,41 @@ const baseModules = [
             correct: 0,
             explanation: "The custom question answering feature of Azure AI Language is specifically designed to build FAQ-style knowledge bases. You can import Q&A pairs from documents or URLs, then query the knowledge base from a client or bot."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "Which Azure AI service is specifically designed to extract structured fields — such as totals, dates, and line items — from supplier invoices?",
+            answers: [
+              "Azure AI Vision (image analysis)",
+              "Azure Document Intelligence",
+              "Azure AI Search with enrichment",
+              "Azure AI Language NER"
+            ],
+            correct: 1,
+            explanation: "Azure Document Intelligence includes prebuilt models (such as prebuilt-invoice) that extract structured fields from documents. It is purpose-built for document understanding, unlike Vision (general image analysis) or Language (text-level NLP)."
+          },
+          {
+            question: "A customer service team needs English-speaking agents to be instantly heard in the customer's native language during live calls. Which Azure service makes real-time speech translation possible?",
+            answers: [
+              "Azure AI Translator with batch audio input",
+              "Azure AI Speech with speech translation",
+              "Azure OpenAI GPT-4o with audio input",
+              "Azure AI Language text translation"
+            ],
+            correct: 1,
+            explanation: "Azure AI Speech provides real-time speech translation that can transcribe and translate spoken audio from one language and synthesize the output in another language, enabling live multilingual conversations."
+          },
+          {
+            question: "An enterprise wants employees to search a large internal document library, with AI automatically tagging documents with detected entities and sentiment. Which Azure service should form the core of this solution?",
+            answers: [
+              "Azure Blob Storage with Azure AI Language",
+              "Azure AI Search with a built-in AI skillset",
+              "Azure OpenAI embeddings stored in Cosmos DB",
+              "Azure AI Language standalone API"
+            ],
+            correct: 1,
+            explanation: "Azure AI Search orchestrates a skillset enrichment pipeline that applies OCR, entity recognition, key phrase extraction, and sentiment analysis during indexing — producing AI-enriched, searchable document collections."
+          }
         ]
       },
       {
@@ -106,6 +141,41 @@ const baseModules = [
             correct: 1,
             explanation: "Infrastructure as code (IaC) using ARM templates or Bicep ensures repeatable, consistent deployments across environments. This aligns with CI/CD best practices for Azure AI resources."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "An Azure AI container is deployed on a factory floor without direct internet access. Which statement correctly describes the billing implication?",
+            answers: [
+              "Billing is waived for air-gapped edge deployments",
+              "The container must periodically reach Azure over the internet to send usage/billing telemetry",
+              "Billing is calculated locally and reconciled monthly offline",
+              "Containers are billed by compute hours, not API usage"
+            ],
+            correct: 1,
+            explanation: "Even when running locally, Azure AI service containers must maintain internet connectivity to report metered usage to Azure. Without this, the container will eventually refuse to process requests."
+          },
+          {
+            question: "Your DevOps team wants GitHub Actions to deploy Azure AI resources without any long-lived secrets stored in the repository. Which authentication mechanism achieves this?",
+            answers: [
+              "GitHub repository secrets containing the Azure subscription key",
+              "Workload identity federation (OIDC) using a managed identity or service principal",
+              "A service principal client secret retrieved from Azure Key Vault at runtime",
+              "A hard-coded access token refreshed daily by a scheduled job"
+            ],
+            correct: 1,
+            explanation: "Workload identity federation allows GitHub Actions to exchange a GitHub OIDC token for an Azure access token with no long-lived secrets stored anywhere. This is Microsoft's recommended approach for CI/CD pipelines."
+          },
+          {
+            question: "A new team member needs to create identical Azure AI resource configurations in a new region. Which tool ensures the configuration is exactly reproducible?",
+            answers: [
+              "Manually copy settings from the Azure portal",
+              "Define the resource as an ARM template or Bicep file and deploy it",
+              "Export from the existing region using the Azure CLI cp command",
+              "Use Azure Data Factory to clone the resource"
+            ],
+            correct: 1,
+            explanation: "ARM templates and Bicep files define Azure resources as code, making deployments fully repeatable and version-controlled. This is the infrastructure-as-code best practice for consistent multi-environment deployments."
+          }
         ]
       },
       {
@@ -143,6 +213,30 @@ const baseModules = [
             ],
             correct: 1,
             explanation: "Azure AI services support network access rules that allow you to restrict inbound traffic to specific virtual networks (using service endpoints) or use private endpoints to eliminate public network exposure entirely."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "An Azure App Service application calls Azure AI services. To avoid storing credentials anywhere, which authentication approach should you configure?",
+            answers: [
+              "Store the API key encrypted in app settings",
+              "Assign a managed identity to the App Service and grant it Cognitive Services User role",
+              "Use a service principal client secret referenced from a config file",
+              "Generate a SAS token from Key 1 on every request"
+            ],
+            correct: 1,
+            explanation: "A managed identity provides a credential-free way for Azure resources to authenticate. Assigning one to the App Service and granting it the Cognitive Services User role means the app never holds or manages a secret."
+          },
+          {
+            question: "You suspect Key 1 of an Azure AI resource was exposed in a log file. How should you remediate this without interrupting live applications that currently use Key 1?",
+            answers: [
+              "Regenerate both keys simultaneously so the old key stops working immediately",
+              "Update all applications to use Key 2 first, then regenerate Key 1",
+              "Delete and recreate the entire Azure AI resource",
+              "Temporarily disable the resource while rotating the key"
+            ],
+            correct: 1,
+            explanation: "Azure AI services provide two keys to enable zero-downtime rotation. The safe procedure is: move apps to Key 2, then regenerate Key 1. Apps continue working on Key 2 throughout the rotation."
           }
         ]
       },
@@ -193,6 +287,41 @@ const baseModules = [
             correct: 1,
             explanation: "The responsible approach is first to measure and understand the bias using fairness assessment tools (such as Azure AI Fairlearn integration). Blind retirement or minimal mitigations (disclaimers) are insufficient without understanding the root cause."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "You want to prevent an Azure OpenAI-powered assistant from returning violent or hate-filled content to users. Which Azure service provides configurable content filters for this purpose?",
+            answers: [
+              "Azure Monitor with custom alert rules on response text",
+              "Azure AI Content Safety with content filters and blocklists",
+              "Azure Policy deny assignments on the OpenAI endpoint",
+              "Microsoft Defender for Cloud threat detection"
+            ],
+            correct: 1,
+            explanation: "Azure AI Content Safety provides content filters that classify and block harmful categories (hate, violence, sexual content, self-harm) in both inputs and outputs. Custom blocklists let you add domain-specific forbidden terms."
+          },
+          {
+            question: "A recruitment tool consistently ranks candidates from one gender lower than equally qualified candidates of another gender. Which Microsoft Responsible AI principle is being violated?",
+            answers: [
+              "Reliability & Safety — the system is not behaving predictably",
+              "Fairness — the system is discriminating across demographic groups",
+              "Privacy & Security — personal data is being misused",
+              "Transparency — the model's decision process is not explained"
+            ],
+            correct: 1,
+            explanation: "The Fairness principle requires AI systems to avoid reinforcing societal biases or discriminating against people based on characteristics such as gender, race, age, or disability."
+          },
+          {
+            question: "A user crafts a message designed to make an AI assistant ignore its system instructions and reveal confidential data. Which Azure AI Content Safety feature is designed to detect this attack?",
+            answers: [
+              "Content filters for violence and hate speech",
+              "Prompt shields for jailbreak and prompt injection detection",
+              "Groundedness evaluation in Azure AI Foundry",
+              "Azure Monitor anomaly detection on token usage"
+            ],
+            correct: 1,
+            explanation: "Prompt shields detect jailbreak attempts (adversarial prompts trying to override system instructions) and prompt injection attacks (malicious content injected via user input). They are a distinct feature from content category filters."
+          }
         ]
       },
       {
@@ -219,6 +348,30 @@ const baseModules = [
             ],
             correct: 1,
             explanation: "Azure Log Analytics lets you write Kusto Query Language (KQL) queries against diagnostic logs sent from Azure AI resources (and other Azure services). This enables deep analysis of request patterns, latency, and error details."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "Your operations team wants an automatic notification whenever an Azure AI service's error rate spikes above a threshold in a given time window. Which Azure capability should they configure?",
+            answers: [
+              "An Azure Cost Management budget alert",
+              "An Azure Monitor metric alert rule on the AI service resource",
+              "An Azure Advisor recommendation policy",
+              "A Microsoft Defender for Cloud security alert"
+            ],
+            correct: 1,
+            explanation: "Azure Monitor metric alerts watch a specific metric (such as failed call count) on an Azure resource and trigger notifications when thresholds are breached. This is distinct from cost alerts, which track spending, not errors."
+          },
+          {
+            question: "A data engineer needs to write a query to identify the top 10 slowest requests to an Azure AI service over the past 7 days. Which Azure tool supports this type of log analysis?",
+            answers: [
+              "Azure Monitor Metrics Explorer (chart-based metric visualization)",
+              "Azure Log Analytics with Kusto Query Language (KQL)",
+              "Azure Cost Management usage reports",
+              "Azure Activity Log filtered export"
+            ],
+            correct: 1,
+            explanation: "Azure Log Analytics stores diagnostic log data and supports KQL queries for deep analysis. You can filter, group, sort, and aggregate log records to find patterns like the slowest requests, authentication failures, or high-latency calls."
           }
         ]
       }
@@ -280,6 +433,41 @@ const baseModules = [
             correct: 1,
             explanation: "The 'system' message in the chat completions API is used to set the persona, tone, and behavioral guidelines for the model. It acts as persistent instructions that shape all subsequent assistant responses in the conversation."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "A developer sets temperature=0 when calling an Azure OpenAI completion endpoint. What effect does this have on the model output?",
+            answers: [
+              "The model generates no output",
+              "The model nearly always picks the highest-probability token, producing highly consistent output",
+              "The model generates maximum creative and varied output",
+              "The model switches to the smallest available deployment"
+            ],
+            correct: 1,
+            explanation: "Temperature=0 makes the model select the highest-probability token at each step, producing nearly deterministic, consistent responses. Higher temperatures increase randomness and creativity."
+          },
+          {
+            question: "A developer needs Azure OpenAI to generate product images from text descriptions. Which model family should they deploy?",
+            answers: [
+              "GPT-4o (multimodal text and image understanding)",
+              "text-embedding-ada-002 (for generating visual embeddings)",
+              "DALL-E (image generation from text prompts)",
+              "Whisper (audio and visual tasks)"
+            ],
+            correct: 2,
+            explanation: "DALL-E is the Azure OpenAI model family for generating images from text descriptions. GPT-4o processes both text and images as inputs but does not generate images; Whisper handles speech; text-embedding-ada-002 generates text vectors."
+          },
+          {
+            question: "You want an Azure OpenAI chatbot to always respond in the tone of a polite insurance expert, regardless of the user's message. Where in the Chat Completions API should this instruction be placed?",
+            answers: [
+              "In the first 'user' message at the start of the conversation",
+              "In the 'system' role message",
+              "In an 'assistant' message that precedes the user turn",
+              "In the 'temperature' parameter"
+            ],
+            correct: 1,
+            explanation: "The 'system' message establishes the model's persona, tone, and persistent rules before any user turn. It acts as standing instructions that apply throughout the conversation."
+          }
         ]
       },
       {
@@ -317,6 +505,30 @@ const baseModules = [
             ],
             correct: 1,
             explanation: "In Azure AI Foundry prompt flows, a grounding node queries a retrieval source (such as Azure AI Search or a vector index) and injects the retrieved content as context that the LLM node can use to generate a grounded answer."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "A product chatbot hallucinates answers not found in your company documentation. You need it to answer only from your documents without retraining the model. Which pattern should you adopt?",
+            answers: [
+              "Fine-tune the base model on your entire documentation corpus",
+              "Implement Retrieval-Augmented Generation (RAG) so relevant documents are injected into each prompt",
+              "Lower the model temperature to 0.1 to reduce creativity",
+              "Increase max_tokens to allow the model to include more context"
+            ],
+            correct: 1,
+            explanation: "RAG retrieves relevant documents at query time and injects them as prompt context. This grounds the model's answers in your actual documentation without the cost and complexity of fine-tuning, and it keeps answers up-to-date as documents change."
+          },
+          {
+            question: "In a RAG pipeline, documents are converted to vectors before indexing. What is the purpose of this vectorization step?",
+            answers: [
+              "It encrypts document content before storage for security",
+              "It converts text into numerical representations that capture semantic meaning, enabling similarity-based retrieval",
+              "It compresses documents to reduce storage costs",
+              "It tokenizes documents for BM25 keyword search"
+            ],
+            correct: 1,
+            explanation: "Vectorization (embedding) converts text into high-dimensional numerical vectors where semantically similar text is close together. This enables the retriever to find documents that are conceptually relevant to a query, even without exact keyword matches."
           }
         ]
       },
@@ -356,6 +568,41 @@ const baseModules = [
             correct: 1,
             explanation: "Chain-of-thought (CoT) prompting instructs the model to reason through a problem step by step before producing a final answer. This significantly improves accuracy on complex reasoning, math, and multi-step tasks."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "You need GPT-4 to reliably output valid JSON. You've added instructions in the system message but the model still occasionally deviates. What additional technique most reliably enforces the format?",
+            answers: [
+              "Raise temperature to 2.0 to explore more output formats",
+              "Include few-shot examples showing correct JSON input/output pairs alongside explicit format instructions",
+              "Reduce max_tokens to force a shorter, simpler output",
+              "Enable streaming mode so partial JSON can be parsed incrementally"
+            ],
+            correct: 1,
+            explanation: "Few-shot prompting with concrete examples is the most reliable in-context format enforcement technique. Azure OpenAI also supports response_format: json_object for strict JSON output."
+          },
+          {
+            question: "A company wants the model to consistently use their brand abbreviations and writing style without embedding a style guide in every prompt. What is the most efficient solution?",
+            answers: [
+              "Fine-tune the model on examples written in their brand voice",
+              "Include the full style guide as a system message in every API call",
+              "Use prompt chaining to review and rewrite every response",
+              "Adjust temperature and top_p to match the brand's desired tone"
+            ],
+            correct: 0,
+            explanation: "Fine-tuning bakes consistent style, tone, and vocabulary into the model weights. This is ideal when few-shot examples or system messages would be too lengthy or still produce inconsistent results."
+          },
+          {
+            question: "A user asks the model to solve a multi-step algebra problem. Which prompting technique encourages the model to show its working before giving the final answer?",
+            answers: [
+              "Zero-shot prompting with a direct question",
+              "Chain-of-thought prompting (e.g., 'think step by step')",
+              "Few-shot prompting with final answers only",
+              "Temperature reduction to eliminate randomness"
+            ],
+            correct: 1,
+            explanation: "Chain-of-thought (CoT) prompting instructs the model to reason through problems incrementally. Phrases like 'think step by step' or providing worked examples significantly improve accuracy on multi-step reasoning tasks."
+          }
         ]
       },
       {
@@ -382,6 +629,30 @@ const baseModules = [
             ],
             correct: 0,
             explanation: "The 'groundedness' metric in Azure AI Foundry evaluations measures how well the model's response is supported by the retrieved context/documents. A low groundedness score indicates the model may be hallucinating content not present in the source."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "Multiple product teams need to build separate AI solutions but share the same Azure networking, security policies, and AI service connections. What Azure AI Foundry resource structure supports this?",
+            answers: [
+              "Create a separate Hub per team so each team has full autonomy",
+              "Create one Hub with multiple Projects — one per team — sharing the Hub's infrastructure",
+              "Create a shared Azure AI Services multi-key resource and distribute keys to each team",
+              "Use Azure Resource Group RBAC to partition a single workspace per team"
+            ],
+            correct: 1,
+            explanation: "In Azure AI Foundry, a Hub provides shared governance and infrastructure. Multiple Projects within the Hub inherit that shared networking and security while each maintaining an isolated workspace for their team's development."
+          },
+          {
+            question: "After deploying a RAG prompt flow, users report that answers often contain facts not present in any retrieved document. Which Azure AI Foundry evaluation metric quantifies this problem?",
+            answers: [
+              "Fluency — measures how natural and grammatically correct the output is",
+              "Coherence — measures logical flow between sentences",
+              "Groundedness — measures whether responses are supported by the retrieved context",
+              "Similarity — measures closeness to a reference answer"
+            ],
+            correct: 2,
+            explanation: "A low groundedness score indicates the model is generating content not found in the retrieved documents — a hallucination. Groundedness is the key metric to monitor in RAG systems."
           }
         ]
       }
@@ -432,6 +703,30 @@ const baseModules = [
             correct: 1,
             explanation: "Multi-agent orchestration is a pattern where a top-level orchestrator agent decomposes a complex task into subtasks and routes them to specialized agents. Each worker agent completes its subtask and returns results to the orchestrator."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "How does an AI agent differ from a single chat completion call to an LLM?",
+            answers: [
+              "Agents use proprietary models unavailable through the standard API",
+              "Agents can autonomously use tools, maintain state, and execute multi-step plans to complete a goal",
+              "Agents automatically fine-tune themselves based on user feedback",
+              "Agents bypass content safety filters for unrestricted capabilities"
+            ],
+            correct: 1,
+            explanation: "While a chat completion returns a single response, an AI agent can iteratively invoke tools (code execution, search, APIs), retain context across steps, and plan a sequence of actions to accomplish complex goals."
+          },
+          {
+            question: "A complex research task needs one agent to plan the work and three specialized agents to handle data retrieval, analysis, and report writing independently. What design pattern does this describe?",
+            answers: [
+              "Sequential prompt chaining with a single model",
+              "Multi-agent orchestration with an orchestrator and specialist worker agents",
+              "Parallel RAG with multiple independent vector stores",
+              "Federated fine-tuning across distributed datasets"
+            ],
+            correct: 1,
+            explanation: "Multi-agent orchestration uses a top-level orchestrator to decompose a goal and delegate subtasks to specialist worker agents. Each worker operates independently and returns results for the orchestrator to synthesize."
+          }
         ]
       },
       {
@@ -458,6 +753,30 @@ const baseModules = [
             ],
             correct: 1,
             explanation: "The code interpreter tool in the Foundry Agent Service allows the agent to write and execute Python code in a sandboxed environment. It can read uploaded files (including CSVs), perform calculations, generate charts, and return results."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "A data analyst wants a Foundry Agent to receive uploaded Excel files, run calculations in Python, and return a summary chart. Which agent tool must be enabled?",
+            answers: [
+              "File search tool (for document retrieval from vector stores)",
+              "Code interpreter tool (for executing Python in a sandboxed environment)",
+              "Custom function calling with an external analytics API",
+              "Azure OpenAI fine-tuning to teach the model data analysis"
+            ],
+            correct: 1,
+            explanation: "The code interpreter tool gives the Foundry Agent a sandboxed Python environment where it can read uploaded files, execute code, generate visualizations, and return results — without any external infrastructure."
+          },
+          {
+            question: "In Semantic Kernel or similar agent frameworks, which component determines which tools to use and in what order when given a high-level goal?",
+            answers: [
+              "A scheduler that queues tool calls in a fixed order",
+              "A planner that uses the LLM to generate a step-by-step execution plan and selects appropriate plugins",
+              "A router that maps intent labels to pre-defined tool sequences",
+              "An evaluator that scores each tool and picks the highest-scoring one"
+            ],
+            correct: 1,
+            explanation: "A planner is the reasoning component in agent frameworks like Semantic Kernel. Given a goal, it uses the LLM to create a dynamic plan — choosing which tools (plugins) to invoke and in which order — rather than following a fixed workflow."
           }
         ]
       }
@@ -508,6 +827,30 @@ const baseModules = [
             correct: 2,
             explanation: "Spatial Analysis (part of Azure Vision in Foundry Tools) is designed for real-time people detection and movement tracking in live video streams, including zone-based occupancy counting and social distancing monitoring."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "A developer wants a single Azure Vision API call to return both a list of detected objects with bounding boxes and a natural language caption of the scene. Which two visual features should they specify?",
+            answers: [
+              "Tags and Faces",
+              "Objects and Caption",
+              "Read and SmartCrops",
+              "Categories and Description"
+            ],
+            correct: 1,
+            explanation: "Azure Vision Image Analysis 4.0 supports requesting multiple visual features in one call. 'Objects' returns detected objects with bounding boxes; 'Caption' returns a generated natural language description of the image."
+          },
+          {
+            question: "A shopping centre security team needs to monitor live CCTV feeds and alert staff when more than 50 people are present in a restricted area. Which Azure AI Vision capability is purpose-built for this?",
+            answers: [
+              "Custom Vision object detection model trained on crowd images",
+              "Azure AI Video Indexer for post-recording analysis",
+              "Spatial Analysis for real-time people detection and zone occupancy in video streams",
+              "Image Analysis batch processing on captured frames"
+            ],
+            correct: 2,
+            explanation: "Spatial Analysis is specifically designed for real-time video stream analysis, including zone-based people counting and movement tracking. Unlike batch or post-hoc analysis tools, it operates on live feeds."
+          }
         ]
       },
       {
@@ -557,6 +900,30 @@ const baseModules = [
             correct: 0,
             explanation: "The code-first Custom Vision workflow requires: (1) create a project with object detection type, (2) upload and tag images with regions, (3) trigger training, (4) publish the trained iteration, (5) use the prediction endpoint."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "Your Custom Vision classification model achieves 92% precision but only 58% recall for the 'damaged' product category. What does the low recall tell you?",
+            answers: [
+              "The model over-predicts 'damaged' — too many false positives",
+              "The model misses many genuinely damaged products — high false negatives for that class",
+              "The 'damaged' class was excluded from the training dataset",
+              "The model has too many training images for this class"
+            ],
+            correct: 1,
+            explanation: "Recall measures the proportion of actual positives correctly identified. Low recall (58%) means the model is missing 42% of truly damaged products (false negatives), even though when it does predict 'damaged' it is usually right (high precision)."
+          },
+          {
+            question: "After training a Custom Vision model, a developer calls the Prediction API endpoint but receives an HTTP 404 error. Which step was most likely skipped?",
+            answers: [
+              "The model was not exported to ONNX format before deployment",
+              "The trained iteration was not published to a prediction resource endpoint",
+              "The training images were uploaded in an unsupported format",
+              "The confidence threshold was not set in the portal"
+            ],
+            correct: 1,
+            explanation: "A trained Custom Vision iteration must be explicitly published to a prediction resource. Without publishing, no prediction endpoint URL exists, resulting in a 404 when attempting to call the API."
+          }
         ]
       },
       {
@@ -583,6 +950,30 @@ const baseModules = [
             ],
             correct: 1,
             explanation: "After a video is indexed, you call the Video Indexer REST API (GET /Videos/{videoId}/Index) with the account ID and access token to retrieve the full JSON insights object containing all extracted metadata."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "A media production company wants to automatically generate speaker-labeled transcripts, extract key topics, and detect scene changes from thousands of uploaded video files. Which Azure service provides all of these capabilities without custom model training?",
+            answers: [
+              "Azure AI Speech batch transcription (transcription only, no video insights)",
+              "Azure AI Video Indexer (comprehensive video AI insights out of the box)",
+              "Azure Media Services with a custom processing pipeline",
+              "Azure AI Language text analytics applied to manually extracted frames"
+            ],
+            correct: 1,
+            explanation: "Azure AI Video Indexer provides comprehensive, built-in video insights including speech-to-text, speaker identification, topic detection, face detection, OCR, sentiment analysis, and keyframe extraction — all without custom training."
+          },
+          {
+            question: "After Azure AI Video Indexer finishes processing a video, a developer needs to programmatically extract the list of identified speakers and their spoken segments. How should they retrieve this data?",
+            answers: [
+              "Download the auto-generated PDF transcript from the portal",
+              "Call the Video Indexer REST API with the video ID to retrieve the full JSON insights",
+              "Subscribe to an Azure Event Grid topic that emits speaker segments",
+              "Query the Azure AI Search index automatically created during indexing"
+            ],
+            correct: 1,
+            explanation: "Video insights are retrieved via the Video Indexer REST API (GET /Videos/{videoId}/Index). The response is a comprehensive JSON object containing all extracted metadata including speakers, topics, transcripts, and sentiment."
           }
         ]
       }
@@ -633,6 +1024,30 @@ const baseModules = [
             correct: 1,
             explanation: "NER categorizes recognized entities by type. Category 'Organization' with subcategory 'Medical' indicates a named medical organization such as a hospital, clinic, or healthcare company was found in the text."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "A legal firm needs to share contracts with external reviewers but must first remove all names, addresses, and national ID numbers. Which Azure AI Language feature automates this?",
+            answers: [
+              "Sentiment analysis to detect sensitive content",
+              "PII detection and redaction",
+              "Key phrase extraction",
+              "Custom named entity recognition"
+            ],
+            correct: 1,
+            explanation: "The PII detection and redaction feature of Azure AI Language identifies personal data categories (names, addresses, phone numbers, ID numbers) and can replace them with placeholders, making documents safe to share."
+          },
+          {
+            question: "An Azure AI Language NER response labels a span of text as category 'Organization', subcategory 'Medical'. Which type of entity was detected?",
+            answers: [
+              "A medication or pharmaceutical drug name",
+              "A named medical institution such as a hospital, clinic, or healthcare company",
+              "A medical procedure or clinical treatment",
+              "A healthcare regulatory body or standard"
+            ],
+            correct: 1,
+            explanation: "NER entity categories describe the type of real-world object mentioned. 'Organization / Medical' indicates a named healthcare institution — not a drug, procedure, or regulation."
+          }
         ]
       },
       {
@@ -659,6 +1074,30 @@ const baseModules = [
             ],
             correct: 1,
             explanation: "Custom Translator allows you to train a model on your own parallel (source + target) sentence pairs. This improves quality for industry-specific vocabulary and phrasing that the base model may not handle optimally."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "A company needs to translate thousands of Word and PDF product manuals from English into 12 languages while keeping original formatting, tables, and images intact. Which Azure AI Translator feature handles this?",
+            answers: [
+              "Standard text translation with textType=html to preserve markup",
+              "Document translation, which processes full documents asynchronously and preserves layout",
+              "Azure AI Language with language detection and Azure OpenAI for rewriting",
+              "Batch text translation with manual post-processing to restore formatting"
+            ],
+            correct: 1,
+            explanation: "Document translation processes complete documents (Word, PDF, HTML, etc.) while preserving the original document structure, tables, and formatting. It translates content without requiring manual layout reconstruction."
+          },
+          {
+            question: "A pharmaceutical company finds the base Azure AI Translator produces poor results for drug names and clinical terminology. What should they implement?",
+            answers: [
+              "Switch to a different Azure region to access a more specialised base model",
+              "Train a Custom Translator model on parallel (source/target) sentence pairs from their domain",
+              "Enable real-time audio translation mode for better terminology handling",
+              "Configure a custom blocklist to prevent mistranslation of specific terms"
+            ],
+            correct: 1,
+            explanation: "Custom Translator lets you train on domain-specific parallel corpora. This significantly improves quality for specialised vocabulary — such as medical, legal, or technical terms — that the general base model may translate poorly."
           }
         ]
       },
@@ -698,6 +1137,41 @@ const baseModules = [
             correct: 1,
             explanation: "Intent recognition combines Azure AI Speech recognition with a language understanding model (CLU/LUIS) to both transcribe speech and classify the intent in a single call, enabling voice-controlled applications."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "You want the text-to-speech output in your app to pause for 2 seconds between sections and pronounce '£42.50' as 'forty-two pounds fifty'. Which technology gives you this level of control?",
+            answers: [
+              "Phoneme substitution table configuration",
+              "Speech Synthesis Markup Language (SSML) with prosody and say-as elements",
+              "Default neural voice settings in the Azure portal",
+              "Azure AI Language text normalization preprocessing"
+            ],
+            correct: 1,
+            explanation: "SSML is an XML-based standard for controlling speech synthesis. It supports prosody (rate, pitch, volume), break elements for pauses, say-as for number/currency pronunciation, and voice selection — none of which are available through the plain text TTS endpoint."
+          },
+          {
+            question: "A contact centre uses Azure AI Speech for real-time transcription, but the model struggles with industry jargon and product codes specific to the company. What is the recommended solution?",
+            answers: [
+              "Increase the audio sample rate to improve recognition accuracy",
+              "Train a custom speech model on domain-specific audio and transcripts",
+              "Switch from real-time transcription to batch processing",
+              "Enable profanity filtering to remove ambiguous terms"
+            ],
+            correct: 1,
+            explanation: "Custom speech lets you train a speech recognition model on your own audio samples and transcripts. This adapts the model to domain-specific vocabulary, product codes, and speaking styles not well-covered by the base model."
+          },
+          {
+            question: "A smart home app needs to understand spoken commands such as 'set the thermostat to 22 degrees' and trigger the correct device action. Which Azure AI Speech feature maps spoken input to structured intents?",
+            answers: [
+              "Keyword recognition for wake-word detection",
+              "Intent recognition integrated with a CLU language model",
+              "Speaker verification for identity confirmation",
+              "Pronunciation assessment for speech quality scoring"
+            ],
+            correct: 1,
+            explanation: "Intent recognition combines speech-to-text with a CLU or LUIS language understanding model in a single API call. The spoken command is transcribed and the intent (e.g., SetThermostat) and entities (e.g., temperature=22) are extracted simultaneously."
+          }
         ]
       },
       {
@@ -735,6 +1209,30 @@ const baseModules = [
             ],
             correct: 1,
             explanation: "Azure AI Language custom question answering supports multi-language projects where content is stored in multiple languages and the service automatically detects the language of the incoming query and matches it to the appropriate language content."
+          }
+        ],
+        variantQuestions: [
+          {
+            question: "A CLU model predicts the correct intent for every test utterance but consistently extracts the wrong portion of text as the entity. What is the most effective corrective action?",
+            answers: [
+              "Add more distinct intents to the model to reduce ambiguity",
+              "Review and correct entity span labels in the training utterances, then retrain",
+              "Lower the entity confidence threshold to capture more candidates",
+              "Increase the number of deployment slots to run multiple model versions"
+            ],
+            correct: 1,
+            explanation: "Entity extraction accuracy depends on the quality and consistency of span labels in training data. Reviewing and correcting mislabeled examples — then retraining and re-evaluating — directly addresses span extraction errors."
+          },
+          {
+            question: "Your question answering knowledge base is used by customers in English, French, and Spanish. What feature eliminates the need to maintain three separate projects?",
+            answers: [
+              "Automatic query pre-translation to English using Azure AI Translator",
+              "Multi-language question answering — a single project detects the query language and matches it to the right content",
+              "Three separate projects, one per language, each sharing the same knowledge base file",
+              "Language detection is not supported — all queries must be in one language"
+            ],
+            correct: 1,
+            explanation: "Azure AI Language custom question answering supports multi-language projects. Content can be stored in multiple languages, and the service automatically detects the query language and matches it to the appropriate content — no separate projects required."
           }
         ]
       }
@@ -807,6 +1305,41 @@ const baseModules = [
             correct: 1,
             explanation: "Azure AI Search uses OData $filter expressions for structured filtering. The filter $filter=price ge 100 and price le 500 and category eq 'electronics' combines a range filter with an equality check and is applied before or after full-text scoring."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "An indexer in Azure AI Search applies OCR, entity recognition, and key phrase extraction to uploaded PDFs before storing results. What is the component that orchestrates these AI enrichment steps called?",
+            answers: [
+              "An indexer pipeline stage",
+              "A skillset",
+              "A scoring profile",
+              "A semantic configuration"
+            ],
+            correct: 1,
+            explanation: "A skillset defines an ordered pipeline of cognitive skills applied during indexing. Each skill receives inputs and produces outputs passed to subsequent skills or mapped to index fields, enabling rich AI enrichment of documents."
+          },
+          {
+            question: "Users search your Azure AI Search index for documents and expect results ranked by conceptual relevance rather than keyword frequency. What must be configured to achieve semantic ranking?",
+            answers: [
+              "A geographic filter applied to result documents",
+              "A semantic configuration with semantic ranking enabled in queries",
+              "A freshness boosting scoring profile",
+              "An OData $orderby clause on a relevance field"
+            ],
+            correct: 1,
+            explanation: "Semantic ranking uses language models to re-rank Azure AI Search results by semantic relevance. It requires a semantic configuration defining which fields contain titles, keywords, and content, and queries must use queryType=semantic."
+          },
+          {
+            question: "Your AI enrichment pipeline produces structured tables, entity mentions, and image embeddings from document indexing. You want these enriched outputs available to a downstream analytics tool independent of the search index. Which Azure AI Search feature stores them in Azure Storage?",
+            answers: [
+              "A vector index projection",
+              "The Knowledge Store",
+              "Azure Synapse Analytics linked service",
+              "An indexer output field mapping"
+            ],
+            correct: 1,
+            explanation: "The Knowledge Store persists enriched content produced by the skillset pipeline as projections in Azure Storage — as tables, JSON objects, or files. This makes AI-enriched data independently consumable by analytics tools, ML pipelines, or dashboards."
+          }
         ]
       },
       {
@@ -845,6 +1378,30 @@ const baseModules = [
             correct: 0,
             explanation: "A composed model in Azure Document Intelligence combines multiple custom models (each trained on a specific document type/layout) into a single model ID. When you analyze a document, the service automatically routes it to the best-matching component model."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "A finance team needs to automatically extract the vendor name, invoice date, total amount, and individual line items from hundreds of supplier invoices. Which Document Intelligence model is purpose-built for this?",
+            answers: [
+              "prebuilt-read — extracts plain text only",
+              "prebuilt-layout — extracts document structure and tables",
+              "prebuilt-invoice — extracts invoice-specific fields",
+              "prebuilt-businessCard — extracts contact information"
+            ],
+            correct: 2,
+            explanation: "The prebuilt-invoice model is trained specifically to identify and extract invoice fields: vendor name, customer name, invoice number, dates, line items, subtotals, taxes, and totals. prebuilt-read and prebuilt-layout do not provide this semantic field extraction."
+          },
+          {
+            question: "A logistics company processes order forms from 6 different suppliers, each with a distinct layout. They want one API endpoint to handle all form types automatically. Which Document Intelligence approach enables this?",
+            answers: [
+              "Train a single custom model on all 6 layouts mixed together",
+              "Use a composed model that combines separate custom models for each layout under one model ID",
+              "Use the prebuilt-layout model, which detects form type automatically",
+              "Submit all forms to a batch processing job with layout auto-selection"
+            ],
+            correct: 1,
+            explanation: "A composed model aggregates multiple custom models — each trained for a specific layout — under a single model ID. The service routes each incoming document to the best-matching component model, enabling one API call to handle multiple form types."
+          }
         ]
       },
       {
@@ -872,6 +1429,30 @@ const baseModules = [
             correct: 1,
             explanation: "Azure Content Understanding provides a comprehensive extraction pipeline that can simultaneously extract structured elements — tables, entity mentions, and embedded images — from documents in a single pass, making them available for downstream consumption."
           }
+        ],
+        variantQuestions: [
+          {
+            question: "A research institution wants a single ingestion pipeline to process scientific PDFs, video lectures, and audio recordings — extracting text, tables, entities, and summaries from all content types. Which Azure service supports this multimodal extraction?",
+            answers: [
+              "Azure Document Intelligence prebuilt-layout (documents only)",
+              "Azure Content Understanding in Foundry Tools (documents, images, video, and audio)",
+              "Azure AI Search indexer with built-in cognitive skills (documents and images only)",
+              "Azure AI Vision batch analysis (images and video only)"
+            ],
+            correct: 1,
+            explanation: "Azure Content Understanding in Foundry Tools is a multimodal ingestion service that processes documents, images, videos, and audio in a single pipeline — extracting text, tables, entities, classifications, and summaries from all content types."
+          },
+          {
+            question: "A data engineering team needs to extract all named entities, embedded images, and tabular data from a large batch of research PDFs in one automated pass. Which Azure Content Understanding operation achieves this?",
+            answers: [
+              "OCR-only pipeline with post-processing scripts for tables and images",
+              "The Content Understanding ingestion pipeline, which extracts entities, tables, and images simultaneously",
+              "Azure AI Search indexer using the layout cognitive skill",
+              "Azure Document Intelligence prebuilt-layout for structural extraction"
+            ],
+            correct: 1,
+            explanation: "The Azure Content Understanding ingestion pipeline extracts multiple element types — entities, tables, and embedded images — from documents in a single pass. This avoids the need to chain separate OCR, NER, and image extraction tools."
+          }
         ]
       }
     ]
@@ -894,13 +1475,18 @@ function shuffleArray(array) {
 }
 
 function createRevisionLesson(moduleIndex, allModules, revNumber) {
-  const previousQuestions = []
+  const revisionPool = []
   for (let i = 0; i < moduleIndex; i++) {
     allModules[i].lessons.forEach(lesson => {
-      lesson.questions.forEach(q => previousQuestions.push(q))
+      // Prefer variant questions for revision — same knowledge, different phrasing
+      // so users must retrieve understanding rather than recall a pattern
+      const pool = (lesson.variantQuestions && lesson.variantQuestions.length > 0)
+        ? lesson.variantQuestions
+        : lesson.questions
+      pool.forEach(q => revisionPool.push(q))
     })
   }
-  const selected = shuffleArray(previousQuestions).slice(0, 4)
+  const selected = shuffleArray(revisionPool).slice(0, 5)
   return {
     title: `Revision ${revNumber} — Mixed Review`,
     isRevision: true,
