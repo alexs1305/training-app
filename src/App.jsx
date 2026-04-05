@@ -904,56 +904,60 @@ function getTotalProgress(completedLessons) {
 function LessonPath({ userData, onStartLesson }) {
   const { completedLessons } = userData
 
+  // Build a flat ordered list of all path nodes (modules + their lessons interleaved)
+  const allNodes = []
+  modules.forEach((mod, modIndex) => {
+    const isModLocked = !isModuleUnlocked(modIndex, completedLessons)
+    const isModCompleted = isModuleCompleted(mod.id, completedLessons)
+    allNodes.push({ type: 'module', mod, isLocked: isModLocked, isCompleted: isModCompleted })
+    mod.lessons.forEach((lesson, lessonIndex) => {
+      const lessonCompleted = completedLessons.includes(`${mod.id}-${lessonIndex}`)
+      const lessonLocked = !isLessonUnlocked(mod.id, lessonIndex, completedLessons)
+      allNodes.push({ type: 'lesson', lesson, mod, lessonIndex, isCompleted: lessonCompleted, isLocked: lessonLocked })
+    })
+  })
+
   return (
-    <div className="lesson-path">
-      {modules.map((mod, modIndex) => {
-        const isLocked = !isModuleUnlocked(modIndex, completedLessons)
-        const isCompleted = isModuleCompleted(mod.id, completedLessons)
-        const hasProgress = mod.lessons.some((_, i) => completedLessons.includes(`${mod.id}-${i}`))
+    <div className="vertical-path">
+      {allNodes.map((node, index) => {
+        const isLast = index === allNodes.length - 1
 
-        let statusIcon = '🔒'
-        if (!isLocked) statusIcon = isCompleted ? '✅' : '📚'
-
-        const moduleClass = [
-          'module',
-          isLocked ? 'locked' : '',
-          isCompleted ? 'completed' : '',
-          hasProgress && !isCompleted ? 'active' : ''
-        ].filter(Boolean).join(' ')
-
-        return (
-          <div key={mod.id} className={moduleClass}>
-            <div className="module-header">
-              <div className="module-title">{mod.title}</div>
-              <div className="module-status">{statusIcon}</div>
+        if (node.type === 'module') {
+          return (
+            <div key={`mod-${node.mod.id}`} className="vp-row">
+              <div className="vp-node-col">
+                <div className={`vp-node vp-module-node ${node.isCompleted ? 'vp-completed' : node.isLocked ? 'vp-locked' : 'vp-available'}`}>
+                  {node.isLocked ? '🔒' : node.isCompleted ? '✓' : node.mod.id}
+                </div>
+                {!isLast && <div className={`vp-connector ${node.isCompleted ? 'vp-connector-done' : ''}`} />}
+              </div>
+              <div className={`vp-label vp-module-label ${node.isLocked ? 'vp-label-locked' : ''}`}>
+                <div className="vp-module-title">{node.mod.title}</div>
+                <div className="vp-module-desc">{node.mod.description}</div>
+              </div>
             </div>
-            <div className="module-description">{mod.description}</div>
-            <div className="module-lessons">
-              {mod.lessons.map((lesson, lessonIndex) => {
-                const lessonId = `${mod.id}-${lessonIndex}`
-                const lessonCompleted = completedLessons.includes(lessonId)
-                const lessonLocked = !isLessonUnlocked(mod.id, lessonIndex, completedLessons)
-
-                const dotClass = [
-                  'lesson-dot',
-                  lessonCompleted ? 'completed' : '',
-                  lessonLocked ? 'locked' : ''
-                ].filter(Boolean).join(' ')
-
-                return (
-                  <div
-                    key={lessonIndex}
-                    className={dotClass}
-                    onClick={() => !lessonLocked && onStartLesson(mod.id, lessonIndex)}
-                    title={lesson.title}
-                  >
-                    {lessonCompleted ? '✓' : lessonIndex + 1}
-                  </div>
-                )
-              })}
+          )
+        } else {
+          return (
+            <div
+              key={`lesson-${node.mod.id}-${node.lessonIndex}`}
+              className={`vp-row ${!node.isLocked ? 'vp-row-clickable' : ''}`}
+              onClick={() => !node.isLocked && onStartLesson(node.mod.id, node.lessonIndex)}
+            >
+              <div className="vp-node-col">
+                <div className={`vp-node vp-lesson-node ${node.isCompleted ? 'vp-completed' : node.isLocked ? 'vp-locked' : 'vp-available'}`}>
+                  {node.isCompleted ? '✓' : node.lessonIndex + 1}
+                </div>
+                {!isLast && <div className={`vp-connector ${node.isCompleted ? 'vp-connector-done' : ''}`} />}
+              </div>
+              <div className={`vp-label vp-lesson-label ${node.isLocked ? 'vp-label-locked' : ''}`}>
+                <div className="vp-lesson-title">{node.lesson.title}</div>
+                {node.isCompleted && <span className="vp-badge-done">Completed</span>}
+                {!node.isLocked && !node.isCompleted && <span className="vp-badge-start">Start →</span>}
+              </div>
             </div>
-          </div>
-        )
+          )
+        }
       })}
     </div>
   )
