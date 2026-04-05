@@ -1789,6 +1789,16 @@ export default function App() {
     localStorage.setItem('azureAITrainer', JSON.stringify(userData))
   }, [userData])
 
+  useEffect(() => {
+    if ('setAppBadge' in navigator) {
+      if (userData.streak > 0) {
+        navigator.setAppBadge(userData.streak).catch(() => {})
+      } else {
+        navigator.clearAppBadge().catch(() => {})
+      }
+    }
+  }, [userData.streak])
+
   function handleStartLesson(moduleId, lessonIndex) {
     const mod = modules.find(m => m.id === moduleId)
     setActiveLesson({ mod, lessonIndex })
