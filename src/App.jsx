@@ -125,8 +125,8 @@ function LessonPath({ userData, onStartLesson }) {
               onClick={() => !node.isLocked && onStartLesson(node.mod.id, node.lessonIndex)}
             >
               <div className="vp-node-col">
-                <div className={`vp-node vp-lesson-node ${node.isCompleted ? 'vp-completed' : node.isLocked ? 'vp-locked' : 'vp-available'}${node.lesson.isRevision ? ' vp-revision' : ''}`}>
-                  {node.isCompleted ? '✓' : node.lesson.isRevision ? '🔄' : node.lessonIndex + 1}
+                <div className={`vp-node vp-lesson-node ${node.isCompleted ? 'vp-completed' : node.isLocked ? 'vp-locked' : 'vp-available'}${node.lesson.isRevision ? ' vp-revision' : node.lesson.isCaseStudy ? ' vp-case-study' : ''}`}>
+                  {node.isCompleted ? '✓' : node.lesson.isRevision ? '🔄' : node.lesson.isCaseStudy ? '📋' : node.lessonIndex + 1}
                 </div>
                 {!isLast && <div className={`vp-connector ${node.isCompleted ? 'vp-connector-done' : ''}`} />}
               </div>
@@ -148,13 +148,14 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
   // questions + variantQuestions each time the lesson is started, so users
   // see different questions and in a different order on every attempt.
   const [questionQueue, setQuestionQueue] = useState(() => {
-    if (lesson.isRevision) return lesson.questions
+    if (lesson.isRevision || lesson.isCaseStudy) return lesson.questions
     const pool = [...lesson.questions, ...(lesson.variantQuestions || [])]
     const shuffled = shuffleArray(pool)
     return shuffled.slice(0, lesson.questions.length)
   })
   const [questionIndex, setQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState(null)
+  const [textInputValue, setTextInputValue] = useState('')
   const [answered, setAnswered] = useState(false)
   const [incorrectQuestions, setIncorrectQuestions] = useState([])
   const [roundNumber, setRoundNumber] = useState(1)
@@ -162,8 +163,12 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
   const [retryQueue, setRetryQueue] = useState([])
   const [showResult, setShowResult] = useState(false)
   const [xpGained, setXpGained] = useState(0)
+  const [scenarioCollapsed, setScenarioCollapsed] = useState(false)
 
   const question = questionQueue[questionIndex]
+  const isTextInput = question.type === 'text-input'
+  const isTextCorrect = answered && isTextInput &&
+    question.acceptedAnswers.some(a => a.toLowerCase() === textInputValue.trim().toLowerCase())
 
   function handleSelectAnswer(index) {
     if (answered) return
@@ -171,10 +176,20 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
   }
 
   function handleCheckAnswer() {
-    if (selectedAnswer === null) return
-    setAnswered(true)
-    if (selectedAnswer !== question.correct) {
-      setIncorrectQuestions(prev => [...prev, question])
+    if (isTextInput) {
+      if (textInputValue.trim() === '') return
+      setAnswered(true)
+      const normalized = textInputValue.trim().toLowerCase()
+      const correct = question.acceptedAnswers.some(a => a.toLowerCase() === normalized)
+      if (!correct) {
+        setIncorrectQuestions(prev => [...prev, question])
+      }
+    } else {
+      if (selectedAnswer === null) return
+      setAnswered(true)
+      if (selectedAnswer !== question.correct) {
+        setIncorrectQuestions(prev => [...prev, question])
+      }
     }
   }
 
@@ -182,7 +197,9 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
     if (questionIndex + 1 < questionQueue.length) {
       setQuestionIndex(i => i + 1)
       setSelectedAnswer(null)
+      setTextInputValue('')
       setAnswered(false)
+      setScenarioCollapsed(true)
       return
     }
 
@@ -204,11 +221,13 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
     setQuestionQueue(retryQueue)
     setQuestionIndex(0)
     setSelectedAnswer(null)
+    setTextInputValue('')
     setAnswered(false)
     setIncorrectQuestions([])
     setRoundNumber(r => r + 1)
     setShowRoundSummary(false)
     setRetryQueue([])
+    setScenarioCollapsed(false)
   }
 
   function getAnswerClass(index) {
@@ -221,6 +240,8 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
     }
     return classes.join(' ')
   }
+
+  const checkDisabled = isTextInput ? textInputValue.trim() === '' : selectedAnswer === null
 
   if (showResult) {
     return (
@@ -258,26 +279,68 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
     <div className="quiz-container">
       <button className="back-button" onClick={onBack}>← Back to Lessons</button>
       <div className="quiz-header">
-        <div className="quiz-title">{lesson.isRevision ? '🔄 ' : ''}{lesson.title}</div>
+        <div className="quiz-title">
+          {lesson.isRevision ? '🔄 ' : lesson.isCaseStudy ? '📋 ' : ''}{lesson.title}
+        </div>
         <div className="quiz-progress">
           Question {questionIndex + 1} of {questionQueue.length}
           {roundNumber > 1 && <span className="retry-badge">Retry Round {roundNumber}</span>}
         </div>
       </div>
-      <div className="question-card">
-        <div className="question-text">{question.question}</div>
-        <div className="answers">
-          {question.answers.map((answer, index) => (
-            <button
-              key={index}
-              className={getAnswerClass(index)}
-              onClick={() => handleSelectAnswer(index)}
-              disabled={answered}
-            >
-              {answer}
-            </button>
-          ))}
+
+      {lesson.isCaseStudy && (
+        <div className="scenario-card">
+          <button
+            className="scenario-toggle"
+            onClick={() => setScenarioCollapsed(c => !c)}
+          >
+            📋 Scenario {scenarioCollapsed ? '▶ Show' : '▼ Hide'}
+          </button>
+          {!scenarioCollapsed && (
+            <div className="scenario-text">{lesson.scenario}</div>
+          )}
         </div>
+      )}
+
+      <div className="question-card">
+        {isTextInput && (
+          <div className="question-type-badge">✏️ Type your answer</div>
+        )}
+        <div className="question-text">{question.question}</div>
+
+        {isTextInput ? (
+          <div className="text-input-container">
+            <input
+              type="text"
+              className={`text-answer-input${answered ? (isTextCorrect ? ' correct' : ' incorrect') : ''}`}
+              value={textInputValue}
+              onChange={e => setTextInputValue(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && !answered && !checkDisabled && handleCheckAnswer()}
+              placeholder="Type your answer here…"
+              disabled={answered}
+              autoFocus
+            />
+            {answered && !isTextCorrect && (
+              <div className="text-correct-answer">
+                ✓ Accepted: {question.acceptedAnswers[0]}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="answers">
+            {question.answers.map((answer, index) => (
+              <button
+                key={index}
+                className={getAnswerClass(index)}
+                onClick={() => handleSelectAnswer(index)}
+                disabled={answered}
+              >
+                {answer}
+              </button>
+            ))}
+          </div>
+        )}
+
         {answered && (
           <div className="explanation">
             <div className="explanation-title">💡 Explanation</div>
@@ -290,7 +353,7 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
           <button
             className="btn btn-primary"
             onClick={handleCheckAnswer}
-            disabled={selectedAnswer === null}
+            disabled={checkDisabled}
           >
             Check Answer
           </button>

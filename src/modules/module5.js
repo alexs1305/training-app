@@ -334,6 +334,69 @@ export default {
           correct: 1,
           explanation: "Azure AI Language custom question answering supports multi-language projects. Content can be stored in multiple languages, and the service automatically detects the query language and matches it to the appropriate content — no separate projects required."
         }
+      ],
+      variantQuestions: [
+        {
+          type: 'text-input',
+          question: "What is the name of the XML-based markup language used to control Azure AI Speech synthesis, including pauses, pronunciation, and prosody?",
+          acceptedAnswers: ["SSML", "ssml", "Speech Synthesis Markup Language", "speech synthesis markup language"],
+          explanation: "SSML (Speech Synthesis Markup Language) is an XML-based standard that provides fine-grained control over text-to-speech output, including prosody, pauses, phoneme pronunciation, and voice selection."
+        }
+      ]
+    },
+    {
+      title: "Case Study: Tailwind Traders Global Support Hub",
+      isCaseStudy: true,
+      scenario: `Tailwind Traders operates a global customer support hub serving customers in English, German, French, and Spanish. They are building an NLP platform with three workstreams:
+
+1. Call transcription — live calls need to be transcribed with high accuracy, including Tailwind's proprietary product codes (e.g., TW-X400, TW-PRO).
+2. Document translation — Tailwind's 500-page product manual must be translated into all four supported languages while preserving its table-of-contents and formatting.
+3. Complaint handling — customer complaint emails need to be summarised into concise paragraphs (not direct quotes), then checked for PII before being stored.`,
+      questions: [
+        {
+          question: "The base Azure AI Speech model frequently misrecognises Tailwind's product codes during live calls. What should the team implement to improve accuracy?",
+          answers: [
+            "Switch from real-time to batch transcription mode",
+            "Train a custom speech model on Tailwind's own call recordings and transcripts",
+            "Use pronunciation assessment to flag uncertain recognitions",
+            "Increase the audio sample rate from 16 kHz to 48 kHz"
+          ],
+          correct: 1,
+          explanation: "Custom speech allows you to train a model on domain-specific audio and transcripts, adapting it to recognise specialised vocabulary and product codes that the base model handles poorly."
+        },
+        {
+          question: "Tailwind needs to translate their 500-page product manual into four languages while keeping tables, headers, and images in place. Which Azure AI Translator feature should they use?",
+          answers: [
+            "Standard text translation with textType=html",
+            "Document translation — processes full documents asynchronously and preserves formatting",
+            "Custom Translator trained on product manual terminology",
+            "Batch text translation via the Language Studio"
+          ],
+          correct: 1,
+          explanation: "Document translation processes complete documents (Word, PDF, HTML) and preserves original layout, tables, and formatting while translating content. Standard text translation strips formatting and requires manual reconstruction."
+        },
+        {
+          question: "A data team wants to summarise customer complaint emails into concise prose — not direct quotes — before storing them. Which Azure AI Language feature should they use?",
+          answers: [
+            "Extractive summarization — selects and returns key sentences verbatim from the email",
+            "Abstractive summarization — generates new, synthesised summary sentences in its own words",
+            "Key phrase extraction — returns important terms and phrases from the email",
+            "Sentiment analysis — classifies the overall tone of the email"
+          ],
+          correct: 1,
+          explanation: "Abstractive summarization generates new summary sentences in the model's own words, synthesising the key information. Extractive summarization returns verbatim sentences — not suitable when paraphrased summaries are required."
+        },
+        {
+          question: "Before storing the summarised complaints, the team must remove any customer names, email addresses, and phone numbers. Which Azure AI Language feature automates this?",
+          answers: [
+            "Key phrase extraction — identifies important terms for removal",
+            "Named entity recognition (NER) — categorises entity mentions",
+            "PII detection and redaction — identifies and removes personal data",
+            "Entity linking — links entities to knowledge base references"
+          ],
+          correct: 2,
+          explanation: "PII detection identifies personal information such as names, phone numbers, email addresses, and IDs, and can optionally replace them with placeholders. It is the purpose-built tool for this anonymisation use case."
+        }
       ]
     }
   ]

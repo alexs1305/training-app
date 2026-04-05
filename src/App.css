@@ -492,6 +492,104 @@ body {
   color: white;
 }
 
+.vp-case-study {
+  background: #e8f4fd;
+  border-color: #0d6efd;
+  color: #0d6efd;
+  font-size: 18px;
+}
+
+.vp-case-study.vp-completed {
+  background: #28a745;
+  border-color: #1e7e34;
+  color: white;
+}
+
+/* ─── Case Study Scenario Card ──────────────────────────── */
+
+.scenario-card {
+  background: #f0f7ff;
+  border: 2px solid #0d6efd;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.scenario-toggle {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d6efd;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.scenario-toggle:hover {
+  text-decoration: underline;
+}
+
+.scenario-text {
+  font-size: 14px;
+  color: #2c3e50;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+/* ─── Text Input Question Type ──────────────────────────── */
+
+.question-type-badge {
+  display: inline-block;
+  background: #e7f3ff;
+  color: #0066cc;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.text-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.text-answer-input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.text-answer-input:focus {
+  border-color: #667eea;
+}
+
+.text-answer-input.correct {
+  border-color: #28a745;
+  background: #d4edda;
+}
+
+.text-answer-input.incorrect {
+  border-color: #dc3545;
+  background: #f8d7da;
+}
+
+.text-correct-answer {
+  font-size: 14px;
+  font-weight: 600;
+  color: #155724;
+  background: #d4edda;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
 .vp-connector {
   width: 3px;
   flex-shrink: 0;

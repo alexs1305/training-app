@@ -272,6 +272,58 @@ export default {
           correct: 1,
           explanation: "Video insights are retrieved via the Video Indexer REST API (GET /Videos/{videoId}/Index). The response is a comprehensive JSON object containing all extracted metadata including speakers, topics, transcripts, and sentiment."
         }
+      ],
+      variantQuestions: [
+        {
+          type: 'text-input',
+          question: "Which Azure AI service is purpose-built to extract insights (transcripts, topics, speaker identification) from uploaded video files, with no custom training required?",
+          acceptedAnswers: ["Azure AI Video Indexer", "Video Indexer", "Azure Video Indexer"],
+          explanation: "Azure AI Video Indexer provides comprehensive, built-in video intelligence including speech-to-text, speaker diarization, topic detection, face identification, and keyframe extraction — all out of the box."
+        }
+      ]
+    },
+    {
+      title: "Case Study: Northwind Retail Vision Platform",
+      isCaseStudy: true,
+      scenario: `Northwind Retail is building a computer vision platform across their stores and distribution centres. They have three distinct requirements:
+
+1. Shelf monitoring — automatically identify which products are on a shelf from photo uploads, using a custom model trained on their own product catalogue.
+2. Access control — verify that a face captured at a turnstile belongs to an authorised employee, and prevent access attempts using a printed photo.
+3. Store footfall — count the number of people in each checkout zone in real time from live CCTV feeds.`,
+      questions: [
+        {
+          question: "Northwind wants to classify product images into their own catalogue categories. No suitable prebuilt Azure model exists for their products. Which Azure service should they use?",
+          answers: [
+            "Azure AI Vision image analysis with the Tags visual feature",
+            "Azure AI Custom Vision — train a custom classification model on labelled product images",
+            "Azure AI Document Intelligence for product label extraction",
+            "Azure OpenAI GPT-4o with few-shot product examples in the prompt"
+          ],
+          correct: 1,
+          explanation: "Azure AI Custom Vision lets you train a classification model on your own labelled images. When no prebuilt model covers your categories, Custom Vision is the correct choice for domain-specific image classification."
+        },
+        {
+          question: "At the distribution centre turnstile, a security guard notices someone holding up a printed photo to the camera. Which Azure AI Face capability would detect and block this presentation attack?",
+          answers: [
+            "Increasing the identification confidence threshold to 0.95",
+            "Liveness detection — determines whether the face is from a real live person or a presentation attack",
+            "Face verification comparing the photo against the enrolled employee record",
+            "returnFaceAttributes with blur detection to reject low-quality images"
+          ],
+          correct: 1,
+          explanation: "Liveness detection verifies that the face comes from a physically present live person, not a photograph or video replay. No confidence threshold or quality filter can substitute for this anti-spoofing check."
+        },
+        {
+          question: "The store operations team needs to know in real time how many people are in each checkout zone from live CCTV. Which Azure AI Vision capability is purpose-built for this use case?",
+          answers: [
+            "Custom Vision object detection model triggered on captured frames",
+            "Image Analysis batch processing running every 30 seconds",
+            "Spatial Analysis — real-time people detection and zone occupancy in live video streams",
+            "Azure AI Video Indexer for post-recording crowd analysis"
+          ],
+          correct: 2,
+          explanation: "Spatial Analysis is designed for real-time people detection and movement tracking in live video streams, including zone-based occupancy counting. Unlike batch or post-hoc tools, it operates continuously on live feeds."
+        }
       ]
     }
   ]

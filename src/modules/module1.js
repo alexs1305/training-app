@@ -356,6 +356,71 @@ export default {
           correct: 1,
           explanation: "Azure Log Analytics stores diagnostic log data and supports KQL queries for deep analysis. You can filter, group, sort, and aggregate log records to find patterns like the slowest requests, authentication failures, or high-latency calls."
         }
+      ],
+      variantQuestions: [
+        {
+          type: 'text-input',
+          question: "What is the name of the Azure query language used to analyse logs in Log Analytics? (abbreviation is fine)",
+          acceptedAnswers: ["KQL", "Kusto Query Language", "kusto query language", "kql"],
+          explanation: "Kusto Query Language (KQL) is the query language used in Azure Log Analytics and Azure Monitor to search, filter, and aggregate log and metric data."
+        }
+      ]
+    },
+    {
+      title: "Case Study: Contoso Insurance Modernisation",
+      isCaseStudy: true,
+      scenario: `Contoso Insurance wants to modernise three internal processes:
+
+1. Invoice processing — the accounts team manually keys data from thousands of supplier invoices monthly.
+2. Customer helpdesk — support agents spend most of their day answering the same policy FAQ questions.
+3. Security posture — a recent audit found API keys hard-coded in application configuration files.
+
+They have selected Azure AI services and need to choose the right service for each need, then apply security best practices.`,
+      questions: [
+        {
+          question: "Contoso wants to automatically extract vendor names, invoice dates, and totals from supplier invoices without custom model training. Which Azure service should they use?",
+          answers: [
+            "Azure AI Vision — image analysis",
+            "Azure Document Intelligence with the prebuilt-invoice model",
+            "Azure AI Search with a custom skillset",
+            "Azure AI Language — key phrase extraction"
+          ],
+          correct: 1,
+          explanation: "Azure Document Intelligence includes prebuilt models (e.g., prebuilt-invoice) that extract structured fields such as vendor, date, amounts, and line items from invoices without requiring custom training."
+        },
+        {
+          question: "Contoso wants to automate answers to common policy questions using a Q&A knowledge base built from existing FAQ documents. Which Azure AI Language feature is designed for this?",
+          answers: [
+            "Custom named entity recognition (NER)",
+            "Sentiment analysis",
+            "Custom question answering",
+            "Text classification"
+          ],
+          correct: 2,
+          explanation: "Azure AI Language's custom question answering feature lets you build a knowledge base from FAQ documents or URLs, then query it to return the best matching answer — ideal for helpdesk automation."
+        },
+        {
+          question: "The security audit found API keys stored in application config files. What is the recommended fix to authenticate to Azure AI services without storing any credentials?",
+          answers: [
+            "Encrypt the keys with Base64 before storing them",
+            "Store the keys in Azure Key Vault and retrieve them at runtime",
+            "Assign a managed identity to the application and grant it the Cognitive Services User role",
+            "Rotate the keys automatically every 24 hours"
+          ],
+          correct: 2,
+          explanation: "Managed identities provide credential-free authentication. The application holds no secret — Azure AD manages the identity token automatically, and Azure AI services accept it via role-based access control."
+        },
+        {
+          question: "Contoso's operations team wants to be alerted when the invoice-processing API returns more than 20 errors in a 5-minute window. Which Azure capability should they configure?",
+          answers: [
+            "Azure Cost Management budget alert",
+            "Azure Monitor metric alert rule on the AI service resource",
+            "Azure Advisor recommendation policy",
+            "Microsoft Defender for Cloud security alert"
+          ],
+          correct: 1,
+          explanation: "Azure Monitor metric alerts watch a specific metric (such as failed call count) on an Azure resource and trigger notifications when thresholds are breached within a time window."
+        }
       ]
     }
   ]

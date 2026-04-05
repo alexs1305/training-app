@@ -210,6 +210,58 @@ export default {
           correct: 1,
           explanation: "The Azure Content Understanding ingestion pipeline extracts multiple element types — entities, tables, and embedded images — from documents in a single pass. This avoids the need to chain separate OCR, NER, and image extraction tools."
         }
+      ],
+      variantQuestions: [
+        {
+          type: 'text-input',
+          question: "In Azure AI Search, what is the name of the feature that persists AI-enriched content from the skillset pipeline into Azure Storage as tables, objects, or files for downstream analytics?",
+          acceptedAnswers: ["Knowledge Store", "knowledge store", "the knowledge store", "The Knowledge Store"],
+          explanation: "The Knowledge Store persists enriched content produced by the skillset pipeline as projections in Azure Storage — as tables, JSON objects, or files — making it independently consumable by analytics tools and ML pipelines."
+        }
+      ]
+    },
+    {
+      title: "Case Study: Woodgrove Bank Document Intelligence",
+      isCaseStudy: true,
+      scenario: `Woodgrove Bank processes thousands of documents daily across three departments:
+
+1. Accounts payable — hundreds of supplier invoices from different vendors arrive every day and need key fields (vendor, date, total) extracted automatically.
+2. Legal — contract PDFs must be made searchable with AI-enriched metadata (entities, key phrases, sentiment), and the enriched data must also be available to a separate analytics dashboard.
+3. Compliance — a new regulation requires all stored documents to be searchable by semantic meaning, not just keywords.`,
+      questions: [
+        {
+          question: "Woodgrove receives invoices from 50 different suppliers, each with a different layout. Which single Document Intelligence approach handles all layouts without building separate models for each?",
+          answers: [
+            "Use prebuilt-read on all invoices and parse the plain text output",
+            "Train one custom model on all 50 invoice layouts mixed together",
+            "Use prebuilt-invoice, which automatically handles all invoice layouts",
+            "Build a composed model combining custom models for each supplier under one model ID"
+          ],
+          correct: 3,
+          explanation: "A composed model aggregates multiple custom models — each trained for a specific layout — under a single model ID. The service routes each document to the best-matching component model, enabling one API call to handle all supplier formats."
+        },
+        {
+          question: "The legal team wants to index contract PDFs with AI-extracted entities and key phrases AND make those enriched results available to a Power BI dashboard independently of the search index. Which Azure AI Search feature supports the second requirement?",
+          answers: [
+            "A custom skill that posts enriched data to an external API",
+            "The Knowledge Store, which persists skillset enrichments as tables or JSON in Azure Storage",
+            "An additional indexer that exports the search index to Azure Blob Storage",
+            "Azure AI Language post-processing applied after indexing"
+          ],
+          correct: 1,
+          explanation: "The Knowledge Store persists AI-enriched content from the skillset pipeline into Azure Storage as tables, objects, or files. This makes enriched data independently consumable by downstream analytics tools without going through the search index."
+        },
+        {
+          question: "Compliance requires that lawyers can find contracts containing the concept of 'force majeure' even if a document uses different wording such as 'act of God' or 'unforeseen circumstances'. Which Azure AI Search feature enables this conceptual retrieval?",
+          answers: [
+            "OData $filter expressions on a keywords field",
+            "Lucene full-text query syntax with synonym maps",
+            "Semantic ranking, which re-ranks results by conceptual relevance using language models",
+            "BM25 keyword scoring with boosting on the content field"
+          ],
+          correct: 2,
+          explanation: "Semantic ranking uses language models to understand the meaning of queries and re-rank results by conceptual relevance, not just keyword frequency. This enables conceptual search where different phrasing of the same idea returns relevant results."
+        }
       ]
     }
   ]
