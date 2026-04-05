@@ -272,6 +272,70 @@ export default {
           correct: 2,
           explanation: "A low groundedness score indicates the model is generating content not found in the retrieved documents — a hallucination. Groundedness is the key metric to monitor in RAG systems."
         }
+      ],
+      variantQuestions: [
+        {
+          type: 'text-input',
+          question: "What is the name of the Azure AI Foundry evaluation metric that measures whether a model's answer is supported by the retrieved context documents?",
+          acceptedAnswers: ["groundedness", "Groundedness"],
+          explanation: "Groundedness measures how well the model's response is supported by the retrieved context. A low score indicates the model is hallucinating content not found in the source documents."
+        }
+      ]
+    },
+    {
+      title: "Case Study: Fabrikam Customer Support Chatbot",
+      isCaseStudy: true,
+      scenario: `Fabrikam manufactures industrial equipment and wants to build a customer support chatbot on Azure OpenAI. Their requirements are:
+
+1. Knowledge base grounding — the chatbot must answer only from Fabrikam's product manuals; it must not invent answers.
+2. Brand voice — responses must always use Fabrikam's formal engineering tone and specific product abbreviations.
+3. Image queries — technicians should be able to upload a photo of a fault code display and ask for help.
+4. Quality assurance — the team needs to detect when chatbot responses contain information not found in any manual.`,
+      questions: [
+        {
+          question: "Fabrikam needs the chatbot to answer only from their product manuals without retraining the model. Which architectural pattern achieves this?",
+          answers: [
+            "Fine-tune GPT-4o on all product manuals",
+            "Implement Retrieval-Augmented Generation (RAG) to inject relevant manual excerpts into each prompt",
+            "Include all manuals in the system message of every API call",
+            "Use a lower temperature to prevent the model from inventing answers"
+          ],
+          correct: 1,
+          explanation: "RAG retrieves the most relevant manual sections at query time and injects them as context. This grounds responses in Fabrikam's documents without retraining, and stays up-to-date as manuals change."
+        },
+        {
+          question: "Fabrikam wants every chatbot response to use their formal engineering tone and product abbreviations without adding a lengthy style guide to every prompt. What is the most efficient approach?",
+          answers: [
+            "Add the full style guide to the system message in every API call",
+            "Fine-tune the Azure OpenAI model on examples written in the brand voice",
+            "Set temperature=0 to make responses more formal",
+            "Use chain-of-thought prompting to improve response quality"
+          ],
+          correct: 1,
+          explanation: "Fine-tuning bakes consistent style, tone, and vocabulary into the model weights. This is ideal when a system-message style guide would be too verbose or still produce inconsistent results across varied queries."
+        },
+        {
+          question: "A technician uploads a photo of a fault code display and types 'What does this mean?'. Which Azure OpenAI capability allows the chatbot to process both the image and the text together?",
+          answers: [
+            "GPT-4o cannot process images; use Azure AI Vision first and pass the description",
+            "GPT-4o's large multimodal model (LMM) capability accepts both text and image inputs in a single API call",
+            "Use DALL-E to interpret the fault code image",
+            "Submit the image to Azure Document Intelligence to extract the code, then pass it to GPT-4"
+          ],
+          correct: 1,
+          explanation: "GPT-4o and other large multimodal models (LMMs) in Azure OpenAI natively accept both text and image inputs in a single API call, removing the need for a separate image preprocessing step."
+        },
+        {
+          question: "After launch, QA testers find that some chatbot answers contain technical details not present in any product manual. Which Azure AI Foundry evaluation metric should the team monitor to detect this?",
+          answers: [
+            "Fluency — to check grammatical correctness",
+            "Coherence — to check logical sentence flow",
+            "Groundedness — to check whether responses are supported by retrieved context",
+            "Similarity — to compare responses to reference answers"
+          ],
+          correct: 2,
+          explanation: "Groundedness measures whether the model's response is supported by the retrieved context. A low score indicates hallucination — content invented by the model rather than sourced from the retrieved manuals."
+        }
       ]
     }
   ]

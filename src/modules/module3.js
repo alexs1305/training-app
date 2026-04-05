@@ -115,6 +115,70 @@ export default {
           correct: 1,
           explanation: "A planner is the reasoning component in agent frameworks like Semantic Kernel. Given a goal, it uses the LLM to create a dynamic plan — choosing which tools (plugins) to invoke and in which order — rather than following a fixed workflow."
         }
+      ],
+      variantQuestions: [
+        {
+          type: 'text-input',
+          question: "In the Microsoft Foundry Agent Service, which built-in tool allows an agent to write and run Python code in a sandboxed environment?",
+          acceptedAnswers: ["code interpreter", "Code Interpreter", "code interpreter tool", "Code Interpreter tool"],
+          explanation: "The Code Interpreter tool gives a Foundry Agent a sandboxed Python execution environment. It can read uploaded files, run calculations, generate charts, and return results without any external infrastructure."
+        }
+      ]
+    },
+    {
+      title: "Case Study: AdventureWorks Travel Booking Agent",
+      isCaseStudy: true,
+      scenario: `AdventureWorks Holidays wants to build an AI travel assistant on Azure that can:
+
+1. Itinerary planning — take a customer's destination and dates, search live flight and hotel availability, and produce a complete itinerary.
+2. Data analysis — process uploaded trip-cost CSV files and summarise total spend per category.
+3. Delegation — for complex group bookings, hand off accommodation research to a specialist agent while the main agent handles flights.
+4. Autonomy — complete these tasks without a human approving each step, but let a human review before any payment is charged.`,
+      questions: [
+        {
+          question: "The travel assistant needs to search flight APIs and hotel databases, maintain conversation context across turns, and produce a final itinerary. A single chat completion cannot do this. What should AdventureWorks build?",
+          answers: [
+            "A fine-tuned GPT-4 model trained on travel data",
+            "An AI agent that can autonomously call tools (flight search API, hotel API) and plan multi-step tasks",
+            "A RAG pipeline that retrieves travel information from a static document store",
+            "A prompt chain where each API call is made manually by the application"
+          ],
+          correct: 1,
+          explanation: "An AI agent uses an LLM as its reasoning engine but adds the ability to call tools (APIs), maintain state across steps, and plan sequences of actions autonomously — exactly what's needed for dynamic itinerary building."
+        },
+        {
+          question: "A customer uploads a CSV of trip expenses and wants a summary of spend by category. Which Foundry Agent tool should be enabled to process the file with Python?",
+          answers: [
+            "File search tool — to retrieve text from the uploaded document",
+            "Code interpreter tool — to execute Python code that reads and analyses the CSV",
+            "Function calling with an external analytics API",
+            "Custom content safety filter for financial data"
+          ],
+          correct: 1,
+          explanation: "The code interpreter tool provides a sandboxed Python environment where the agent can read the uploaded CSV, run Pandas or similar analysis, and return a structured summary — all without external infrastructure."
+        },
+        {
+          question: "For large group bookings, AdventureWorks wants one main agent to handle flights while delegating hotel research to a specialist agent. What architectural pattern is this?",
+          answers: [
+            "Single-agent RAG with multiple vector stores",
+            "Multi-agent orchestration — an orchestrator delegates subtasks to specialist worker agents",
+            "Prompt chaining — sequential API calls managed by application code",
+            "Federated fine-tuning across regional model deployments"
+          ],
+          correct: 1,
+          explanation: "Multi-agent orchestration uses a top-level orchestrator to decompose a goal and delegate subtasks to specialist workers. The orchestrator synthesises results from all workers to produce the final response."
+        },
+        {
+          question: "AdventureWorks wants the agent to act autonomously for planning but pause for human approval before processing any payment. What design principle does this represent?",
+          answers: [
+            "Removing the agent's tool access for payment functions",
+            "Human-in-the-loop — a checkpoint where the agent pauses and requires human confirmation before irreversible actions",
+            "Setting temperature=0 to make payment decisions deterministic",
+            "Using content safety filters to block payment-related prompts"
+          ],
+          correct: 1,
+          explanation: "Human-in-the-loop (HITL) is a design pattern where an autonomous agent pauses at defined checkpoints — typically before irreversible actions like payments — and waits for a human to review and approve before proceeding."
+        }
       ]
     }
   ]
