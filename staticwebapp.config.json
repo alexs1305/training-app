@@ -1,0 +1,19 @@
+{
+  "navigationFallback": {
+    "rewrite": "/azure_ai_trainer.html",
+    "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+  },
+  "routes": [
+    {
+      "route": "/",
+      "rewrite": "/azure_ai_trainer.html"
+    }
+  ],
+  "globalHeaders": {
+    "cache-control": "public, max-age=3600"
+  },
+  "mimeTypes": {
+    ".html": "text/html",
+    ".json": "application/json"
+  }
+}
