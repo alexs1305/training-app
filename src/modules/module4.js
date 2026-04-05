@@ -140,6 +140,90 @@ export default {
       ]
     },
     {
+      title: "Azure AI Face Service",
+      questions: [
+        {
+          question: "A security system needs to determine whether a face captured by a camera belongs to one of 200 registered employees. Which Azure AI Face operation enables this?",
+          answers: [
+            "Face detection — returns bounding boxes and face IDs only",
+            "Face identification — matches a detected face against a PersonGroup of known people",
+            "Face verification — performs a 1:1 comparison between two specific face images",
+            "Face grouping — clusters visually similar faces together"
+          ],
+          correct: 1,
+          explanation: "Face identification performs a 1:N comparison, matching a detected face against all persons enrolled in a PersonGroup (or LargePersonGroup) and returning the most likely match with a confidence score. Verification is 1:1; identification is 1:N."
+        },
+        {
+          question: "What is liveness detection in Azure AI Face, and why is it important for authentication scenarios?",
+          answers: [
+            "It checks whether the image resolution is sufficient for accurate recognition",
+            "It determines whether the face is from a real person physically present rather than a photo, video, or mask replay",
+            "It validates that the Azure Face endpoint is reachable before processing requests",
+            "It confirms that the detected face matches a live record in the enrolled database"
+          ],
+          correct: 1,
+          explanation: "Liveness detection (anti-spoofing) verifies that the face captured is from a live person physically present — not a photograph, video replay, or synthetic mask. It is a critical security layer for face-based authentication to prevent presentation attacks."
+        },
+        {
+          question: "A developer calls the Azure AI Face Detect API and wants to determine whether the detected person is wearing glasses. What must they include in the API request?",
+          answers: [
+            "The returnFaceId parameter set to true",
+            "The returnFaceAttributes parameter specifying 'glasses' (and any other desired attributes)",
+            "A separate call to a dedicated FaceAttribute API after detection",
+            "A custom vision model trained on eyewear classification"
+          ],
+          correct: 1,
+          explanation: "The Face Detect API only returns face attributes when you explicitly request them via the returnFaceAttributes parameter. Supported attributes include glasses, age estimation, head pose, blur, exposure, occlusion, and mask. Without this parameter, only bounding box and optional face IDs are returned."
+        },
+        {
+          question: "An e-commerce site wants to verify that a selfie taken during login matches the ID photo submitted during account registration. Which Azure AI Face operation performs this 1:1 comparison?",
+          answers: [
+            "Face identification against a PersonGroup containing the user's enrolled face",
+            "Face verification, which compares two face images and returns whether they depict the same person",
+            "Liveness detection, which confirms the selfie is from a real person",
+            "Face grouping, which clusters similar faces to find a match"
+          ],
+          correct: 1,
+          explanation: "Face verification performs a 1:1 comparison between two face images and returns a confidence score indicating whether they depict the same individual. For comparing a selfie against a specific stored ID photo, verification is the correct and most efficient operation."
+        }
+      ],
+      variantQuestions: [
+        {
+          question: "A hotel check-in kiosk uses Azure AI Face to recognize VIP guests. An attacker attempts to authenticate using a printed photograph of a VIP. Which Azure AI Face capability is designed to prevent this attack?",
+          answers: [
+            "Face identification with a high confidence threshold to reject low-confidence matches",
+            "Liveness detection, which determines whether the face is from a real live person or a presentation attack",
+            "Face verification comparing the photo against the enrolled face ID",
+            "returnFaceAttributes with blur and exposure checks to reject low-quality images"
+          ],
+          correct: 1,
+          explanation: "Liveness detection detects presentation attacks such as printed photographs, video replays, and masks. It verifies that the face comes from a physically present live person — a check that confidence thresholds or quality filters cannot provide."
+        },
+        {
+          question: "You have enrolled 500 employees into a PersonGroup and trained it. You now need to confirm whether a captured face belongs specifically to employee ID 42, without checking all other employees. Which Face API operation is most efficient?",
+          answers: [
+            "Face identification against the full PersonGroup — it returns the best match automatically",
+            "Face verification between the captured face and a stored face from employee 42's enrollment",
+            "Face grouping to cluster the captured face with similar faces in the PersonGroup",
+            "Face detection with returnFaceAttributes to compare metadata with employee 42's profile"
+          ],
+          correct: 1,
+          explanation: "Face verification performs a direct 1:1 comparison between a captured face and a specific known face. When you already know which person to check against, verification is more targeted and efficient than identification, which evaluates all persons in the group."
+        },
+        {
+          question: "After calling the Azure AI Face Detect API, the response contains a 'faceId' but no attribute data such as age or glasses. What is the most likely reason?",
+          answers: [
+            "The image was too small for attribute analysis",
+            "The returnFaceAttributes parameter was not specified in the request",
+            "Attribute detection requires a separate Face Analyze API call",
+            "Attribute data is only available in the Azure Government cloud region"
+          ],
+          correct: 1,
+          explanation: "Face attributes (age, glasses, emotion, head pose, blur, etc.) are only returned when you explicitly include the returnFaceAttributes parameter in the Detect request. Without it, the API returns only bounding boxes and face IDs."
+        }
+      ]
+    },
+    {
       title: "Video Analysis",
       questions: [
         {
