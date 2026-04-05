@@ -12,7 +12,7 @@ import './App.css'
 //   6. Implement knowledge mining and information extraction solutions (15-20%)
 // ============================================================
 
-const modules = [
+const baseModules = [
   // ─────────────────────────────────────────────────────────
   // MODULE 1 — Plan and manage an Azure AI solution (20-25%)
   // ─────────────────────────────────────────────────────────
@@ -878,6 +878,57 @@ const modules = [
   }
 ]
 
+// ============================================================
+// REVISION LESSON GENERATION
+// Randomly selects questions from all previous modules to
+// create mixed-review lessons inserted into each module.
+// ============================================================
+
+function shuffleArray(array) {
+  const arr = [...array]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
+function createRevisionLesson(moduleIndex, allModules, revNumber) {
+  const previousQuestions = []
+  for (let i = 0; i < moduleIndex; i++) {
+    allModules[i].lessons.forEach(lesson => {
+      lesson.questions.forEach(q => previousQuestions.push(q))
+    })
+  }
+  const selected = shuffleArray(previousQuestions).slice(0, 4)
+  return {
+    title: `Revision ${revNumber} — Mixed Review`,
+    isRevision: true,
+    questions: selected
+  }
+}
+
+function buildModulesWithRevision(allBaseModules) {
+  return allBaseModules.map((mod, index) => {
+    if (index === 0) return mod // No revision for first module
+
+    const rev1 = createRevisionLesson(index, allBaseModules, 1)
+    const rev2 = createRevisionLesson(index, allBaseModules, 2)
+
+    const lessons = [...mod.lessons]
+    // Insert first revision at ~1/3 through the lesson list, second at ~2/3
+    const pos1 = Math.max(1, Math.floor(lessons.length / 3))
+    const pos2 = Math.max(pos1 + 1, Math.floor((2 * lessons.length) / 3) + 1)
+
+    lessons.splice(pos2, 0, rev2)
+    lessons.splice(pos1, 0, rev1)
+
+    return { ...mod, lessons }
+  })
+}
+
+const modules = buildModulesWithRevision(baseModules)
+
 function isModuleCompleted(moduleId, completedLessons) {
   const mod = modules.find(m => m.id === moduleId)
   return mod.lessons.every((_, index) => completedLessons.includes(`${moduleId}-${index}`))
@@ -945,8 +996,8 @@ function LessonPath({ userData, onStartLesson }) {
               onClick={() => !node.isLocked && onStartLesson(node.mod.id, node.lessonIndex)}
             >
               <div className="vp-node-col">
-                <div className={`vp-node vp-lesson-node ${node.isCompleted ? 'vp-completed' : node.isLocked ? 'vp-locked' : 'vp-available'}`}>
-                  {node.isCompleted ? '✓' : node.lessonIndex + 1}
+                <div className={`vp-node vp-lesson-node ${node.isCompleted ? 'vp-completed' : node.isLocked ? 'vp-locked' : 'vp-available'}${node.lesson.isRevision ? ' vp-revision' : ''}`}>
+                  {node.isCompleted ? '✓' : node.lesson.isRevision ? '🔄' : node.lessonIndex + 1}
                 </div>
                 {!isLast && <div className={`vp-connector ${node.isCompleted ? 'vp-connector-done' : ''}`} />}
               </div>
@@ -1039,7 +1090,7 @@ function QuizView({ mod, lesson, onComplete, onBack }) {
     <div className="quiz-container">
       <button className="back-button" onClick={onBack}>← Back to Lessons</button>
       <div className="quiz-header">
-        <div className="quiz-title">{lesson.title}</div>
+        <div className="quiz-title">{lesson.isRevision ? '🔄 ' : ''}{lesson.title}</div>
         <div className="quiz-progress">Question {questionIndex + 1} of {lesson.questions.length}</div>
       </div>
       <div className="question-card">
