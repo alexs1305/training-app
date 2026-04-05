@@ -1,12 +1,12 @@
 {
   "navigationFallback": {
-    "rewrite": "/azure_ai_trainer.html",
+    "rewrite": "/index.html",
     "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
   },
   "routes": [
     {
       "route": "/",
-      "rewrite": "/azure_ai_trainer.html"
+      "rewrite": "/index.html"
     }
   ],
   "globalHeaders": {
