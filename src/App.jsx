@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { useNotifications } from './useNotifications'
 
 // ============================================================
 // AI-102 ALIGNED MODULES
@@ -1760,10 +1761,13 @@ export default function App() {
       streak: 0,
       xp: 0,
       lastVisit: null,
+      lastCompletedDate: null,
       completedLessons: []
     }
   })
   const [activeLesson, setActiveLesson] = useState(null)
+
+  useNotifications()
 
   useEffect(() => {
     setUserData(prev => {
@@ -1797,11 +1801,12 @@ export default function App() {
   function handleLessonComplete(xp) {
     const { mod, lessonIndex } = activeLesson
     const lessonId = `${mod.id}-${lessonIndex}`
+    const today = new Date().toDateString()
     setUserData(prev => {
       const completedLessons = prev.completedLessons.includes(lessonId)
         ? prev.completedLessons
         : [...prev.completedLessons, lessonId]
-      return { ...prev, completedLessons, xp: prev.xp + xp }
+      return { ...prev, completedLessons, xp: prev.xp + xp, lastCompletedDate: today }
     })
   }
 
